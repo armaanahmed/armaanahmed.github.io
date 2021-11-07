@@ -1,0 +1,13 @@
+
+
+
+### thanks for checking my website out! here's a little about myself:
+
+After pursuing a bachelor's degree in Neural Science at New York University, I 
+I decided to attend Columbia University to pursue graduate studies in Data Science
+and Computational Biology. Here, I work at Richard Axel's Lab, where I'm assisting
+Evan Schaffer in research on the spatial and temporal structure of neural activity
+across the fly brain.
+
+![](https://media.giphy.com/media/N7ZWw9aAUmt9e/giphy.gif)
+
