@@ -1,0 +1,131 @@
+---
+title: "flex dash hw4"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(p8105.datasets)
+library(plotly)
+library(dplyr)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### A scatter plot capturing the frequency of items by aisle
+
+```{r numberoforders}
+#laod the instacart dataset
+data(instacart)
+
+#data exploration
+#head(instacart, 4)
+
+#names of variables
+#names(instacart)
+#we have 15 variables, ranging from order_id to aisle
+
+#summary(instacart)
+
+#How many aisles are there, and which aisles are the most items ordered from?
+#unique(instacart['aisle'])
+
+frequency_table <- sort(table(instacart['aisle']))
+#head(frequency_table)
+
+#Make a plot that shows the number of items ordered in each aisle, limiting this to aisles with more than 10000 items ordered. Arrange aisles sensibly, and organize your plot so others can read it.
+
+#get rid of aisles with less than 10000 items
+frequency_table <- frequency_table[frequency_table>10000]
+
+#make it a dataframe
+frequency_df = as.data.frame(frequency_table)
+#frequency_df
+
+names(frequency_df)[1] <- 'aisle'
+names(frequency_df)[2] <- 'number_of_orders'
+
+fig <- plot_ly(frequency_df, x = ~aisle, y = ~number_of_orders, type = 'bar', name = 'SF Zoo')
+fig <- fig %>% layout(yaxis = list(title = 'frequency'), barmode = 'stack', title = 'frequency by aisle')
+
+fig
+
+#frequency_df %>%
+#  mutate(text_label = str_c("aisle: ", aisle, "\nnumberoforders: ", number_of_orders)) %>% 
+#  plot_ly(
+#    x = ~aisle, y = ~number_of_orders, type = "scatter", mode = "markers", text = ~text_label, alpha = 0.5)
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### A bar graph about the frequency of different departments 
+
+```{r departmentfrequency}
+frequency_table2 <- sort(table(instacart['product_name']))
+frequency_table2 <- frequency_table2[frequency_table2<50000]
+frequency_df2 = as.data.frame(frequency_table2)
+#frequency_df2
+
+names(frequency_df2)[1] <- 'product_name'
+names(frequency_df2)[2] <- 'num_of_orders'
+
+favgrocerybyailse <- left_join(frequency_df2, 
+                      instacart, 
+                       by=c("product_name"))
+
+favgrocerybyailse = favgrocerybyailse[!duplicated(favgrocerybyailse$product_name),]
+
+
+#get rid of aisles with less than 10000 items
+table23 <- head(favgrocerybyailse,-10)
+
+
+#favgrocerybyailse <- favgrocerybyailse[favgrocerybyailse$num_of_orders>1000]
+
+#fig <- plot_ly(frequency_df, x = ~aisle, y = ~number_of_orders, type = 'bar', name = 'SF Zoo')
+#fig <- fig %>% layout(yaxis = list(title = 'Count'), barmode = 'stack')
+
+#fig
+
+dairy <- instacart[which(instacart$aisle == 'milk'),]
+
+frequency_table <- sort(table(dairy['product_name']))
+
+frequency_df = as.data.frame(frequency_table)
+
+
+
+dairyplot <- plot_ly(frequency_df, x = ~Var1, y = ~Freq, hover_name="Most popular types of milk", type = 'scatter', mode = 'markers', text = paste("<br>Type of Milk: ", frequency_df$Var1, "<br>Units purchased: ", frequency_df$Freq, hoverinfo = ''), marker = list(size = ~Freq/100, opacity = 0.5, color = ~Freq, fill = ~Freq, labels={~Var1}))
+dairyplot <- dairyplot %>% layout(title = 'Most popular types of milk',
+         xaxis = list(showgrid = FALSE, showticklabels=FALSE, visible = FALSE),
+         yaxis = list(showgrid = FALSE))
+dairyplot
+
+
+```
+
+### A pie chart about the frequency of vanilla themed snacks
+
+```{r vanillapiechart}
+#lets look at just vanilla themed snacks
+library(tidyverse)
+vanillasnacksdf <- frequency_df2  %>% 
+  filter(str_detect(str_to_lower(word(product_name)), "vanilla"))
+
+vanillasnacksdf <- vanillasnacksdf[which(vanillasnacksdf$num_of_orders > 100),]
+
+typesofsnackspiechart <- plot_ly(vanillasnacksdf, labels = ~product_name, values = ~num_of_orders, type = 'pie', showlegend=FALSE)
+typesofsnackspiechart <- typesofsnackspiechart %>% layout(title = 'a pie chart of popular vanilla themed snacks ordered on instacart',
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+
+
+typesofsnackspiechart
+```
