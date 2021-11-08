@@ -7,9 +7,9 @@ navbar:
       href: resume.html
     - icon: fa-envelope fa-lg
       href: mailto:<asa2249@columbia.edu>
-    - icon: fa-linkedin fab
+    - text: "Linkedin"
       href: https://www.linkedin.com/in/armaansahmed/
-    - icon: fa-github fab
+    - text: "Github"
       href: http://github.com/armaanahmed/
     - text: "flex_dashboard"
       href: flex_dashboard.html
