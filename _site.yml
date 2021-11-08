@@ -11,6 +11,8 @@ navbar:
       href: https://www.linkedin.com/in/armaansahmed/
     - icon: fa-github fab
       href: http://github.com/armaanahmed/
+    - text: "flex_dashboard"
+      href: flex_dashboard.html
 output:
   html_document:
     theme: cerulean
