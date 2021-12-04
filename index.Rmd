@@ -1,6 +1,6 @@
 
 <br>
-welcome to my website!
+welcome to my website! take a look at my projects!
 
 [about](resume.html)
 
